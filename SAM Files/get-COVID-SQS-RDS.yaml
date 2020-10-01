@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: An AWS Serverless Specification template describing your function.
+Resources:
+  getCOVIDSQSRDS:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: main.main_handler
+      Runtime: python3.8
+      CodeUri: .
+      Description: ''
+      MemorySize: 128
+      Timeout: 3
+      Role: 'arn:aws:iam::#######:role/lambda-vpc-role'
+      Events:
+        SQS1:
+          Type: SQS
+          Properties:
+            Queue:
+              'Fn::GetAtt':
+                - SQSQueue1
+                - Arn
+            BatchSize: 10
+      VpcConfig:
+        SecurityGroupIds:
+          - sg--------
+        SubnetIds:
+          - subnet-------
+          - subnet-------
+      Layers:
+        - 'arn:aws:lambda:us-east-1:#######:layer:pymysql:1'
+  SQSQueue1:
+    Type: 'AWS::SQS::Queue'
+    Properties: {}
